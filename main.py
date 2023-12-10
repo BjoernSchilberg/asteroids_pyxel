@@ -1,7 +1,7 @@
 """# Asteroids #
 ## The classic game of asteroids implemented in [Pyxel](https://github.com/kitao/pyxel)! ##
 
-Controls are **→** & **←** for turning, **↑** for acceleration and **space** for shooting! 
+Controls are **→** & **←** for turning, **↑** for acceleration and **space** for shooting!
 
 **Q**: Quit the game
 
@@ -78,7 +78,7 @@ class Game:
     def check_input(self):
         """Check for input and modify the game state accordingly."""
         if not self.death:
-            if pyxel.btn(pyxel.KEY_UP):
+            if pyxel.btn(pyxel.KEY_UP) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_UP):
                 if not self.ship.accelerating:
                     sound.start_accelerate()
                 self.ship.accelerate()
@@ -87,22 +87,22 @@ class Game:
                     sound.stop_accelerate()
                 self.ship.accelerating = False
 
-            if pyxel.btnp(pyxel.KEY_SPACE, 0, constants.BULLET_SHOOT_FREQUENCY):
+            if pyxel.btnp(pyxel.KEY_SPACE, 0, constants.BULLET_SHOOT_FREQUENCY) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B, 0, constants.BULLET_SHOOT_FREQUENCY):
                 self.ship.shoot()
 
-            if pyxel.btn(pyxel.KEY_SPACE):
+            if pyxel.btn(pyxel.KEY_SPACE) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B):
                 self.ship.yes_shoot()
             else:
                 self.ship.no_shoot()
 
-            if pyxel.btn(pyxel.KEY_LEFT):
+            if pyxel.btn(pyxel.KEY_LEFT) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT):
                 self.ship.rotate("l")
-            elif pyxel.btn(pyxel.KEY_RIGHT):
+            if pyxel.btn(pyxel.KEY_RIGHT) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT):
                 self.ship.rotate("r")
-        elif pyxel.btnp(pyxel.KEY_R):
+        elif pyxel.btnp(pyxel.KEY_R) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_A):
             self.reset_game()
 
-        if pyxel.btnp(pyxel.KEY_Q) or pyxel.btnp(pyxel.KEY_ESCAPE):
+        if pyxel.btnp(pyxel.KEY_Q) or pyxel.btnp(pyxel.KEY_ESCAPE) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_X):
             pyxel.quit()
 
     def check_collisions(self):
@@ -125,7 +125,7 @@ class Game:
 
     def check_spawn_asteroid(self):
         """Keep track of the time and spawn new asteroids when appropriate.
-        
+
         Asteroids spawn on a reducing time scale (time decreases by a certain percentage each time."""
         if pyxel.frame_count >= self.next_spawn:
             Asteroid()
